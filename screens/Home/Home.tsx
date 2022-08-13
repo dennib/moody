@@ -1,27 +1,37 @@
-import { StatusBar } from "expo-status-bar";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { Button } from 'components';
+import { StatusBar } from 'expo-status-bar';
+import { ScrollView, Text } from 'react-native';
+import { useAuthSelector } from 'stores/auth';
 
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { homeStyles } from './Home.styles';
 
-import { RootStackParamList } from "screens/RootStackParams";
-import { HOME } from "utils/constants";
+const Home = () => {
+  const { user, handleLogout } = useAuthSelector();
 
-type HomeScreenProps = NativeStackScreenProps<RootStackParamList, typeof HOME>;
+  // const fetchMoods = async () => {
+  //   const rawMoods = await getDocs(collection(db, 'moods'));
+  //   const moods: any[] = [];
+  //   rawMoods.forEach(doc =>
+  //     moods.push(doc.data())
+  //   );
+  //   setMoods(moods);
+  // };
 
-const Home: React.FC<HomeScreenProps> = () => {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={homeStyles.container}>
       <StatusBar style="auto" />
-      <Text>Home page</Text>
+      <Text>Homepage</Text>
+
+      {user && (
+        <>
+          <Text>{user.displayName}</Text>
+          <Text>{user.email}</Text>
+        </>
+      )}
+
+      <Button text="Sign Out" onPress={handleLogout} />
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
 
 export { Home };

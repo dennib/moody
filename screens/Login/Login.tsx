@@ -1,32 +1,47 @@
-import { StatusBar } from "expo-status-bar";
-import { View, Text, StyleSheet } from "react-native";
+import { Button } from 'components';
+import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
 
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { View, Text, TextInput } from 'react-native';
+import { useAuthSelector } from 'stores/auth';
 
-import { RootStackParamList } from "screens/RootStackParams";
-import { LOGIN } from "utils/constants";
+import { loginStyles } from './Login.styles';
 
-type LoginScreenProps = NativeStackScreenProps<
-  RootStackParamList,
-  typeof LOGIN
->;
+const Login = () => {
+  const { handleLogin } = useAuthSelector();
 
-const Login: React.FC<LoginScreenProps> = ({ navigation }) => {
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>();
+
+  const doLogin = async () => {
+    try {
+      await handleLogin(username, password);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={loginStyles.container}>
       <StatusBar style="auto" />
-      <Text>Login page</Text>
+
+      <Text>Moody Login</Text>
+      <TextInput
+        style={loginStyles.input}
+        onChangeText={setUsername}
+        value={username}
+      />
+      <TextInput
+        style={loginStyles.input}
+        onChangeText={setPassword}
+        value={password}
+        secureTextEntry
+      />
+      {error && <Text>{error}</Text>}
+      <Button text="Login" onPress={doLogin} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-    paddingTop: 40,
-  },
-});
 
 export { Login };
