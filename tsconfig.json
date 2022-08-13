@@ -1,9 +1,39 @@
 {
   "extends": "expo/tsconfig.base",
+  "display": "Default",
   "compilerOptions": {
+    "target": "es5",
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "inlineSources": false,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "preserveWatchOutput": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "allowJs": true,
+    "noImplicitThis": true,
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": false,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@firebaseConfig": ["./firebase.ts"]
+    },
+    "lib": ["es6", "dom"],
+    "module": "esnext",
+    "jsx": "react-jsx"
   },
+  "include": ["./**/*.ts", "./**/*.tsx"],
   "exclude": [
     "node_modules",
     "babel.config.js",
