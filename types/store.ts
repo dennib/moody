@@ -7,5 +7,10 @@ export interface IAuthStoreDefaultValues {
 
 export interface IAuthStore extends IAuthStoreDefaultValues {
   handleLogin: (email: string, password: string) => Promise<void>;
+  handleSignUp: (
+    displayName: string,
+    email: string,
+    password: string
+  ) => Promise<void>;
   handleLogout: () => Promise<void>;
 }

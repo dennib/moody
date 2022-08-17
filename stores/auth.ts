@@ -1,4 +1,8 @@
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
 import { useCallback } from 'react';
 import { AsyncStorage } from 'react-native';
 import { IAuthStore, IAuthStoreDefaultValues } from 'types/store';
@@ -30,6 +34,25 @@ const handleLogin = async (email: string, password: string) => {
   }
 };
 
+const handleSignUp = async (
+  displayName: string,
+  email: string,
+  password: string
+) => {
+  try {
+    const { user } = await createUserWithEmailAndPassword(
+      auth,
+      email.trim(),
+      password.trim()
+    );
+    await updateProfile(user, { displayName });
+    useStore.setState({ user: { ...user, displayName } });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 const handleLogout = async () => {
   try {
     await auth.signOut();
@@ -45,6 +68,7 @@ const useStore = create(
       (): IAuthStore => ({
         ...DEFAULT_VALUES,
         handleLogin,
+        handleSignUp,
         handleLogout,
       }),
       {
