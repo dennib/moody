@@ -16,6 +16,7 @@
     "@react-navigation/native-stack": "^6.5.0",
     "@react-navigation/stack": "^6.1.1",
     "@typescript-eslint/eslint-plugin-tslint": "^5.33.0",
+    "date-fns": "^2.29.2",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-import-resolver-typescript": "^3.4.1",
