@@ -8,4 +8,5 @@ export interface IMood {
   date: Date;
   value: Moods;
   userId: string;
+  message: string;
 }

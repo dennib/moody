@@ -6,6 +6,13 @@ const chooseMoodStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  selectedMood: {
+    textAlign: 'center',
+  },
+  messageInput: {
+    borderWidth: 1,
+    padding: 10,
+  },
 });
 
 export { chooseMoodStyles };

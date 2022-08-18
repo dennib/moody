@@ -39,7 +39,10 @@ const useDB = () => {
     }
   };
 
-  const saveMood = async (currentMood: Moods): Promise<void> => {
+  const saveMood = async (
+    currentMood: Moods,
+    message: string
+  ): Promise<void> => {
     if (!user) return;
     const q = query(
       moodsRef,
@@ -47,10 +50,11 @@ const useDB = () => {
       where('date', '>=', todayStart),
       where('date', '<=', todayEnd)
     );
-    const nextMood = {
+    const nextMood: IMood = {
       userId: user.uid,
       date: new Date(),
       value: currentMood,
+      message,
     };
     try {
       const moods: QueryDocumentSnapshot<DocumentData>[] = [];
