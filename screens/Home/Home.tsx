@@ -1,4 +1,3 @@
-import { Button } from 'components';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, Text } from 'react-native';
 import { useAuthSelector } from 'stores/auth';
@@ -6,7 +5,7 @@ import { useAuthSelector } from 'stores/auth';
 import { homeStyles } from './Home.styles';
 
 const Home = () => {
-  const { user, handleLogout } = useAuthSelector();
+  const { user } = useAuthSelector();
 
   // const fetchMoods = async () => {
   //   const rawMoods = await getDocs(collection(db, 'moods'));
@@ -28,8 +27,6 @@ const Home = () => {
           <Text>{user.email}</Text>
         </>
       )}
-
-      <Button text="Sign Out" onPress={handleLogout} />
     </ScrollView>
   );
 };

@@ -1,5 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Button } from 'components';
 import { useAuthSelector } from 'stores/auth';
 import * as SCREEN_NAMES from 'utils/constants';
 
@@ -8,7 +9,7 @@ import { Login, Home, Register } from './screens';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const { isAuthenticated } = useAuthSelector();
+  const { isAuthenticated, handleLogout } = useAuthSelector();
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -16,6 +17,7 @@ export default function App() {
           headerShown: true,
           statusBarAnimation: 'slide',
           animation: 'slide_from_right',
+          headerRight: () => <Button text="Log out" onPress={handleLogout} />,
         }}
       >
         {isAuthenticated ?? (
