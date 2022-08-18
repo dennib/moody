@@ -3,3 +3,9 @@ export enum Moods {
   AVERAGE = 0,
   GREATE = 1,
 }
+
+export interface IMood {
+  date: Date;
+  value: Moods;
+  userId: string;
+}

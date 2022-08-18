@@ -1,18 +1,16 @@
 import { Button } from 'components';
 import { globalStyles } from 'globalStyles';
-import { Alert, Text, View } from 'react-native';
+import { useDB } from 'hooks';
+import { Text, View } from 'react-native';
 import { BasePageProps } from 'screens/RootStackParams';
 import { Moods } from 'types/mood';
 import { chooseMoodStyles } from './ChooseMood.styles';
 
 const ChooseMood = ({ navigation }: BasePageProps<'MoodChoose'>) => {
-  const handleMood = (mood: Moods) => {
-    Alert.alert(`Mood chosen!`, `${Moods[mood]}`, [
-      {
-        text: 'OK',
-        onPress: () => navigation.navigate('Home'),
-      },
-    ]);
+  const { saveMood } = useDB();
+  const handleMood = async (mood: Moods) => {
+    await saveMood(mood);
+    navigation.navigate('Home');
   };
 
   return (

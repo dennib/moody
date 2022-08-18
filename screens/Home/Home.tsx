@@ -1,24 +1,28 @@
 import { Button } from 'components';
 import { StatusBar } from 'expo-status-bar';
 import { globalStyles } from 'globalStyles';
+import { useDB } from 'hooks';
+import { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { BasePageProps } from 'screens/RootStackParams';
-import { useAuthSelector } from 'stores/auth';
+import { useAuthStore } from 'stores/auth';
+import { IMood, Moods } from 'types/mood';
 
 import { homeStyles } from './Home.styles';
 
 const Home = ({ navigation }: BasePageProps<'Home'>) => {
-  const { user } = useAuthSelector();
-  console.log('🚀 ~ file: Home.tsx ~ line 9 ~ Home ~ user', user);
+  const user = useAuthStore(state => state.user);
+  const { getTodayMood } = useDB();
 
-  // const fetchMoods = async () => {
-  //   const rawMoods = await getDocs(collection(db, 'moods'));
-  //   const moods: any[] = [];
-  //   rawMoods.forEach(doc =>
-  //     moods.push(doc.data())
-  //   );
-  //   setMoods(moods);
-  // };
+  const [mood, setMood] = useState<IMood | undefined>();
+
+  useEffect(() => {
+    fetchMood();
+    const unsubscribe = navigation.addListener('focus', fetchMood);
+    return unsubscribe;
+  }, [navigation, user]);
+
+  const fetchMood = () => user && getTodayMood().then(setMood);
 
   return (
     <ScrollView contentContainerStyle={globalStyles.container}>
@@ -32,11 +36,25 @@ const Home = ({ navigation }: BasePageProps<'Home'>) => {
           </View>
 
           <View style={homeStyles.actions}>
-            <Text>How are you today?</Text>
-            <Button
-              text="Tell me ->"
-              onPress={() => navigation.navigate('MoodChoose')}
-            />
+            {!mood ? (
+              <>
+                <Text>How are you today?</Text>
+                <Button
+                  text="Tell me"
+                  onPress={() => navigation.navigate('MoodChoose')}
+                />
+              </>
+            ) : (
+              <>
+                <Text>
+                  Mood for today already selected {`${Moods[mood?.value]}`}
+                </Text>
+                <Button
+                  text="Change mood"
+                  onPress={() => navigation.navigate('MoodChoose')}
+                />
+              </>
+            )}
           </View>
         </>
       )}

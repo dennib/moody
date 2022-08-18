@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button } from 'components';
+import { LogBox } from 'react-native';
 import { useAuthSelector } from 'stores/auth';
 import * as SCREEN_NAMES from 'utils/constants';
 
@@ -10,6 +11,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const { isAuthenticated, handleLogout } = useAuthSelector();
+  LogBox.ignoreLogs(['timer']);
   return (
     <NavigationContainer>
       <Stack.Navigator
