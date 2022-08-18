@@ -1,4 +1,5 @@
 import { Button } from 'components';
+import { format } from 'date-fns';
 import { StatusBar } from 'expo-status-bar';
 import { globalStyles } from 'globalStyles';
 import { useDB } from 'hooks';
@@ -46,6 +47,7 @@ const Home = ({ navigation }: BasePageProps<'Home'>) => {
               </>
             ) : (
               <>
+                <Text>{format(new Date(), 'EEEE, dd MMMM yyyy')}</Text>
                 <Text>
                   Mood for today already selected {`${Moods[mood?.value]}`}
                 </Text>
