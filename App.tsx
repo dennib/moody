@@ -4,7 +4,7 @@ import { Button } from 'components';
 import { useAuthSelector } from 'stores/auth';
 import * as SCREEN_NAMES from 'utils/constants';
 
-import { Login, Home, Register } from './screens';
+import * as SCREENS from './screens';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,23 +22,29 @@ export default function App() {
       >
         {isAuthenticated ?? (
           <Stack.Screen
-            name="Home"
-            component={Home}
+            name={SCREEN_NAMES.HOME}
+            component={SCREENS.Home}
             options={{ animation: 'none' }}
           />
         )}
         {isAuthenticated ? (
-          <Stack.Screen name="Home" component={Home} />
+          <>
+            <Stack.Screen name="Home" component={SCREENS.Home} />
+            <Stack.Screen
+              name={SCREEN_NAMES.MOOD_CHOOSE}
+              component={SCREENS.ChooseMood}
+            />
+          </>
         ) : (
           <>
             <Stack.Screen
               name={SCREEN_NAMES.LOGIN}
-              component={Login}
+              component={SCREENS.Login}
               options={{ headerShown: false, animation: 'fade_from_bottom' }}
             />
             <Stack.Screen
               name={SCREEN_NAMES.REGISTER}
-              component={Register}
+              component={SCREENS.Register}
               options={{ headerShown: false }}
             />
           </>

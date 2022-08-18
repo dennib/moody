@@ -4,6 +4,7 @@ export type RootStackParamList = {
   Home: undefined;
   Login: undefined;
   Register: undefined;
+  MoodChoose: undefined;
 };
 
 export type BasePageProps<T extends keyof RootStackParamList> =

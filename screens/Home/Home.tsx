@@ -1,11 +1,15 @@
+import { Button } from 'components';
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, Text } from 'react-native';
+import { globalStyles } from 'globalStyles';
+import { ScrollView, Text, View } from 'react-native';
+import { BasePageProps } from 'screens/RootStackParams';
 import { useAuthSelector } from 'stores/auth';
 
 import { homeStyles } from './Home.styles';
 
-const Home = () => {
+const Home = ({ navigation }: BasePageProps<'Home'>) => {
   const { user } = useAuthSelector();
+  console.log('🚀 ~ file: Home.tsx ~ line 9 ~ Home ~ user', user);
 
   // const fetchMoods = async () => {
   //   const rawMoods = await getDocs(collection(db, 'moods'));
@@ -17,14 +21,23 @@ const Home = () => {
   // };
 
   return (
-    <ScrollView contentContainerStyle={homeStyles.container}>
+    <ScrollView contentContainerStyle={globalStyles.container}>
       <StatusBar style="auto" />
-      <Text>Homepage</Text>
 
       {user && (
         <>
-          <Text>{user.displayName}</Text>
-          <Text>{user.email}</Text>
+          <View style={homeStyles.greetings}>
+            <Text>Hi {user.displayName}!</Text>
+            <Text>({user.email})</Text>
+          </View>
+
+          <View style={homeStyles.actions}>
+            <Text>How are you today?</Text>
+            <Button
+              text="Tell me ->"
+              onPress={() => navigation.navigate('MoodChoose')}
+            />
+          </View>
         </>
       )}
     </ScrollView>
