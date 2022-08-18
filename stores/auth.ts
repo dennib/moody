@@ -14,7 +14,7 @@ import { auth } from '../firebase';
 const AUTH_STORE_STORAGE_KEY = 'moody-auth';
 
 const DEFAULT_VALUES: IAuthStoreDefaultValues = {
-  isAuthenticated: false,
+  isAuthenticated: undefined,
   user: null,
 };
 

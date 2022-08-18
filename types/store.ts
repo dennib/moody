@@ -1,7 +1,7 @@
 import { User } from 'firebase/auth';
 
 export interface IAuthStoreDefaultValues {
-  isAuthenticated: boolean;
+  isAuthenticated?: boolean;
   user: User | null;
 }
 
