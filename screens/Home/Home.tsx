@@ -1,5 +1,5 @@
 import { Button } from 'components';
-import { format } from 'date-fns';
+import { format, isToday } from 'date-fns';
 import { StatusBar } from 'expo-status-bar';
 import { globalStyles } from 'globalStyles';
 import { useDB } from 'hooks';
@@ -13,17 +13,28 @@ import { homeStyles } from './Home.styles';
 
 const Home = ({ navigation }: BasePageProps<'Home'>) => {
   const user = useAuthStore(state => state.user);
-  const { getTodayMood } = useDB();
+  const { getRecentMoods } = useDB();
 
   const [mood, setMood] = useState<IMood | undefined>();
+  const [recentMoods, setRecentMoods] = useState<IMood[]>([]);
 
   useEffect(() => {
-    fetchMood();
-    const unsubscribe = navigation.addListener('focus', fetchMood);
+    fetchRecentMoods();
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchRecentMoods();
+    });
     return unsubscribe;
   }, [navigation, user]);
 
-  const fetchMood = () => user && getTodayMood().then(setMood);
+  const fetchRecentMoods = () =>
+    user &&
+    getRecentMoods().then(moods => {
+      if (!moods) return;
+      const todayMood = moods.find(mood => isToday(mood.date));
+      const otherMoods = moods.filter(mood => !isToday(mood.date));
+      setRecentMoods(otherMoods);
+      setMood(todayMood);
+    });
 
   return (
     <ScrollView contentContainerStyle={globalStyles.container}>
@@ -34,9 +45,23 @@ const Home = ({ navigation }: BasePageProps<'Home'>) => {
           <View style={homeStyles.greetings}>
             <Text>Hi {user.displayName}!</Text>
             <Text>({user.email})</Text>
+
+            <View style={homeStyles.recentMoods}>
+              {recentMoods.length > 0 && (
+                <>
+                  <Text style={{ fontWeight: 'bold' }}>Recent moods</Text>
+                  {recentMoods.map(({ date, value }) => (
+                    <Text key={date.toISOString()}>
+                      {`${format(date, 'EEE, dd MMM')}: ${Moods[value]}`}
+                    </Text>
+                  ))}
+                </>
+              )}
+            </View>
           </View>
 
           <View style={homeStyles.actions}>
+            <Text>{format(new Date(), 'EEEE, dd MMMM yyyy')}</Text>
             {!mood ? (
               <>
                 <Text>How are you today?</Text>
@@ -47,7 +72,6 @@ const Home = ({ navigation }: BasePageProps<'Home'>) => {
               </>
             ) : (
               <>
-                <Text>{format(new Date(), 'EEEE, dd MMMM yyyy')}</Text>
                 <Text>
                   Mood for today already selected {`${Moods[mood?.value]}`}
                 </Text>

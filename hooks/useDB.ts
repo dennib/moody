@@ -1,4 +1,4 @@
-import { endOfToday, startOfToday } from 'date-fns';
+import { endOfToday, startOfToday, subDays } from 'date-fns';
 import { db } from 'firebase';
 import {
   collection,
@@ -13,6 +13,7 @@ import {
 } from 'firebase/firestore';
 import { useAuthSelector } from 'stores/auth';
 import { IMood, Moods } from 'types/mood';
+import { convertDBDate } from 'utils/db';
 
 const useDB = () => {
   const { user } = useAuthSelector();
@@ -34,6 +35,32 @@ const useDB = () => {
 
       moodDocs.forEach(moodDoc => moods.push(moodDoc.data() as IMood));
       return moods[0] || null;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getRecentMoods = async (): Promise<IMood[] | void> => {
+    if (!user) return;
+    const moodsRef = collection(db, 'moods');
+    const startDate = subDays(new Date(), 7);
+    const q = query(
+      moodsRef,
+      where('userId', '==', user?.uid),
+      where('date', '>=', startDate)
+    );
+
+    try {
+      const moods: IMood[] = [];
+      const moodDocs = await getDocs(q);
+
+      moodDocs.forEach(moodDoc =>
+        moods.push({
+          ...moodDoc.data(),
+          date: convertDBDate(moodDoc.data().date),
+        } as IMood)
+      );
+      return moods;
     } catch (err) {
       console.log(err);
     }
@@ -71,7 +98,7 @@ const useDB = () => {
     }
   };
 
-  return { getTodayMood, saveMood };
+  return { getTodayMood, getRecentMoods, saveMood };
 };
 
 export { useDB };
