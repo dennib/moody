@@ -16,12 +16,12 @@ import { IMood, Moods } from 'types/mood';
 
 const useDB = () => {
   const { user } = useAuthSelector();
-  const moodsRef = collection(db, 'moods');
-  const todayStart = startOfToday();
-  const todayEnd = endOfToday();
 
   const getTodayMood = async (): Promise<IMood | undefined> => {
     if (!user) return;
+    const moodsRef = collection(db, 'moods');
+    const todayStart = startOfToday();
+    const todayEnd = endOfToday();
     const q = query(
       moodsRef,
       where('userId', '==', user?.uid),
@@ -44,6 +44,9 @@ const useDB = () => {
     message: string
   ): Promise<void> => {
     if (!user) return;
+    const moodsRef = collection(db, 'moods');
+    const todayStart = startOfToday();
+    const todayEnd = endOfToday();
     const q = query(
       moodsRef,
       where('userId', '==', user?.uid),
