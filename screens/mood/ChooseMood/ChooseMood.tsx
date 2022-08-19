@@ -27,7 +27,7 @@ const ChooseMood = ({ navigation }: BasePageProps<'MoodChoose'>) => {
     });
 
   const handleMood = async () => {
-    if (Number.isNaN(selectedMood)) return;
+    if (!Number.isInteger(selectedMood)) return;
     await saveMood(selectedMood as number, message);
     navigation.navigate('Home');
   };
